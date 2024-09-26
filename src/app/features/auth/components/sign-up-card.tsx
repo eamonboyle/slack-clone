@@ -1,32 +1,32 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { FaGithub } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
-import { SignInFlow } from "../types";
-import { useState } from "react";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Separator } from '@/components/ui/separator'
+import { FaGithub } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
+import { SignInFlow } from '../types'
+import { useState } from 'react'
 
 interface SignUpCardProps {
-    setState: (state: SignInFlow) => void;
+    setState: (state: SignInFlow) => void
 }
 
 export const SignUpCard = ({ setState }: SignUpCardProps) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsLoading(true);
-        console.log(email, password, confirmPassword);
+        e.preventDefault()
+        setIsLoading(true)
+        console.log(email, password, confirmPassword)
         // try {
         //     await signUpWithEmailAndPassword(email, password);
         // } catch (error) {
         //     console.error(error);
         // }
-    };
+    }
     return (
         <Card className="w-full h-full p-8">
             <CardHeader className="px-0 pt-0">
@@ -87,12 +87,12 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
                     </Button>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                    Already have an account?{" "}
-                    <span className="text-sky-700 hover:underline cursor-pointer" onClick={() => setState("signIn")}>
+                    Already have an account?{' '}
+                    <span className="text-sky-700 hover:underline cursor-pointer" onClick={() => setState('signIn')}>
                         Sign in
                     </span>
                 </p>
             </CardContent>
         </Card>
-    );
-};
+    )
+}
