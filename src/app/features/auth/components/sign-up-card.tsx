@@ -21,6 +21,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(false)
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -36,7 +37,7 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
             return
         }
 
-        signIn('password', { email, password, flow: 'signUp' })
+        signIn('password', { name, email, password, flow: 'signUp' })
             .catch((err) => {
                 console.error(err)
                 setError('Invalid email or password')
@@ -68,6 +69,14 @@ export const SignUpCard = ({ setState }: SignUpCardProps) => {
             )}
             <CardContent className="space-y-5 px-0 pb-0">
                 <form onSubmit={onPasswordSignUp} className="space-y-2.5">
+                    <Input
+                        disabled={isLoading}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Name"
+                        type="name"
+                        required
+                    />
                     <Input
                         disabled={isLoading}
                         value={email}
