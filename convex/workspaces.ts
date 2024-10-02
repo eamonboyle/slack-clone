@@ -32,3 +32,18 @@ export const get = query({
         return await ctx.db.query('workspaces').collect()
     },
 })
+
+export const getById = query({
+    args: {
+        workspaceId: v.id('workspaces'),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx)
+
+        if (userId === null) {
+            throw new ConvexError('Unauthorized')
+        }
+
+        return await ctx.db.get(args.workspaceId)
+    },
+})
