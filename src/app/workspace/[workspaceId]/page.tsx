@@ -9,5 +9,5 @@ export default function WorkspaceIdPage() {
 
     if (isLoading) return <div>Loading...</div>
 
-    return <div>Workspace {JSON.stringify(data)}</div>
+    return <div>Workspace {data?.name}</div>
 }

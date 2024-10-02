@@ -16,6 +16,8 @@ export const CreateWorkSpaceModal = () => {
     const [open, setOpen] = useCreateWorkspaceModal()
     const { mutate, isPending } = useCreateWorkspace()
 
+    console.log(open)
+
     const handleClose = () => {
         setOpen(false)
         setName('')
