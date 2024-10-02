@@ -2,7 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { ConvexClientProvider } from '@/components/CovexClientProvider'
 import { ConvexAuthNextjsServerProvider } from '@convex-dev/auth/nextjs/server'
-import { CreateWorkSpaceModal } from './features/workspaces/components/create-workspace-modal'
+import { Modals } from '@/components/modals'
+import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
     title: 'Slack Clone - NextJS',
@@ -19,7 +20,8 @@ export default function RootLayout({
             <html lang="en">
                 <body className={`antialiased`}>
                     <ConvexClientProvider>
-                        <CreateWorkSpaceModal />
+                        <Toaster />
+                        <Modals />
                         {children}
                     </ConvexClientProvider>
                 </body>
