@@ -1,4 +1,4 @@
-import { ConvexError, v } from 'convex/values'
+import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 import { getAuthUserId } from '@convex-dev/auth/server'
 
@@ -16,7 +16,7 @@ export const create = mutation({
         const userId = await getAuthUserId(ctx)
 
         if (userId === null) {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const joinCode = generateJoinCode()
@@ -72,6 +72,31 @@ export const get = query({
     },
 })
 
+export const getInfoById = query({
+    args: {
+        workspaceId: v.id('workspaces'),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx)
+
+        if (userId === null) {
+            throw new Error('Unauthorized')
+        }
+
+        const member = await ctx.db
+            .query('members')
+            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .unique()
+
+        const workspace = await ctx.db.get(args.workspaceId)
+
+        return {
+            name: workspace?.name,
+            isMember: !!member,
+        }
+    },
+})
+
 export const getById = query({
     args: {
         workspaceId: v.id('workspaces'),
@@ -80,7 +105,7 @@ export const getById = query({
         const userId = await getAuthUserId(ctx)
 
         if (userId === null) {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const member = await ctx.db
@@ -105,7 +130,7 @@ export const update = mutation({
         const userId = await getAuthUserId(ctx)
 
         if (userId === null) {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const member = await ctx.db
@@ -114,7 +139,7 @@ export const update = mutation({
             .unique()
 
         if (!member || member.role !== 'admin') {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         await ctx.db.patch(args.workspaceId, {
@@ -133,7 +158,7 @@ export const deleteById = mutation({
         const userId = await getAuthUserId(ctx)
 
         if (userId === null) {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const member = await ctx.db
@@ -142,7 +167,7 @@ export const deleteById = mutation({
             .unique()
 
         if (!member || member.role !== 'admin') {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const [members] = await Promise.all([
@@ -171,7 +196,7 @@ export const resetJoinCode = mutation({
         const userId = await getAuthUserId(ctx)
 
         if (userId === null) {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const member = await ctx.db
@@ -180,13 +205,57 @@ export const resetJoinCode = mutation({
             .unique()
 
         if (!member || member.role !== 'admin') {
-            throw new ConvexError('Unauthorized')
+            throw new Error('Unauthorized')
         }
 
         const joinCode = generateJoinCode()
 
         await ctx.db.patch(args.workspaceId, {
             joinCode,
+        })
+
+        return args.workspaceId
+    },
+})
+
+export const join = mutation({
+    args: {
+        workspaceId: v.id('workspaces'),
+        joinCode: v.string(),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx)
+
+        if (userId === null) {
+            throw new Error('Unauthorized')
+        }
+
+        const workspace = await ctx.db.get(args.workspaceId)
+
+        if (!workspace) {
+            throw new Error('Workspace not found')
+        }
+
+        // check the join code
+        if (workspace.joinCode.toLowerCase() !== args.joinCode.toLowerCase()) {
+            throw new Error('Invalid join code')
+        }
+
+        // check if the user is already a member
+        const member = await ctx.db
+            .query('members')
+            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .unique()
+
+        if (member) {
+            throw new Error('Already a member')
+        }
+
+        // add the user to the workspace
+        await ctx.db.insert('members', {
+            userId,
+            workspaceId: args.workspaceId,
+            role: 'member',
         })
 
         return args.workspaceId

@@ -27,7 +27,7 @@ interface UserItemProps {
 
 export const UserItem = ({ id, label = 'Member', image, variant }: UserItemProps) => {
     const workspaceId = useWorkspaceId()
-    const avatarFallback = label.slice(0, 2).toUpperCase()
+    const avatarFallback = label.charAt(0).toUpperCase()
 
     return (
         <Button variant="transparent" size="sm" className={cn(userItemVariants({ variant }))} asChild>

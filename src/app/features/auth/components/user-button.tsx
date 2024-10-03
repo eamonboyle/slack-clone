@@ -21,13 +21,13 @@ export const UserButton = () => {
     }
 
     const handleSignOut = () => {
+        router.replace('/')
         signOut()
-        router.push('/')
     }
 
     const { image, name } = data
 
-    const avatarFallback = name!.slice(0, 2).toUpperCase()
+    const avatarFallback = name!.charAt(0).toUpperCase()
 
     return (
         <DropdownMenu modal={false}>
