@@ -8,13 +8,18 @@ import { useGetChannels } from '@/app/features/channels/api/use-get-channels'
 import { WorkspaceSection } from './workspace-section'
 import { useGetMembers } from '@/app/features/members/api/use-get-members'
 import { UserItem } from './user-item'
+import { useCreateChannelModal } from '@/app/features/channels/store/use-create-channel-modal'
 
 export const WorkspaceSidebar = () => {
     const workspaceId = useWorkspaceId()
-    const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_open, setOpen] = useCreateChannelModal()
+
     const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({ workspaceId })
     const { data: channels, isLoading: isChannelsLoading } = useGetChannels({ workspaceId })
     const { data: members, isLoading: isMembersLoading } = useGetMembers({ workspaceId })
+    const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
 
     if (isMemberLoading || isWorkspaceLoading || isChannelsLoading || isMembersLoading) {
         return (
@@ -42,7 +47,11 @@ export const WorkspaceSidebar = () => {
                 <SidebarItem label="Drafts & Sent" icon={SendHorizonal} id="drafts-sent" />
             </div>
 
-            <WorkspaceSection label="Channels" hint="Add a channel" onNew={() => {}}>
+            <WorkspaceSection
+                label="Channels"
+                hint="Add a channel"
+                onNew={member.role === 'admin' ? () => setOpen(true) : undefined}
+            >
                 {channels?.map((item) => (
                     <SidebarItem key={item._id} label={`# ${item.name}`} icon={MessageSquareText} id={item._id} />
                 ))}

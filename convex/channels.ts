@@ -52,8 +52,10 @@ export const create = mutation({
             throw new ConvexError('Unauthorized')
         }
 
+        const parsedName = args.name.replace(/\s+/g, '-').toLowerCase()
+
         const channel = await ctx.db.insert('channels', {
-            name: args.name,
+            name: parsedName,
             workspaceId: args.workspaceId,
         })
 
