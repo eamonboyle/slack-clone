@@ -43,8 +43,8 @@ export const InviteModal = ({ open, setOpen, name, joinCode }: InviteModalProps)
                     onSuccess: () => {
                         toast.success('Join code reset')
                     },
-                    onError: (error) => {
-                        toast.error(error.message)
+                    onError: () => {
+                        toast.error('Failed to reset join code')
                     },
                 },
             )
