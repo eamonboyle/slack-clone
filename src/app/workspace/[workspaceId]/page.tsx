@@ -1,13 +1,72 @@
 'use client'
 
+import { useEffect, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { Loader, TriangleAlert } from 'lucide-react'
+
+import { useGetChannels } from '@/app/features/channels/api/use-get-channels'
+import { useCreateChannelModal } from '@/app/features/channels/store/use-create-channel-modal'
 import { useGetWorkspace } from '@/app/features/workspaces/api/use-get-workspace'
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
+import { useCurrentMember } from '@/app/features/members/api/use-current-member'
 
 export default function WorkspaceIdPage() {
+    const router = useRouter()
     const workspaceId = useWorkspaceId()
-    const { data, isLoading } = useGetWorkspace({ workspaceId })
 
-    if (isLoading) return <div>Loading...</div>
+    const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
+    const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({ workspaceId })
+    const { data: channels, isLoading: isChannelsLoading } = useGetChannels({ workspaceId })
 
-    return <div>Workspace {data?.name}</div>
+    const channelId = useMemo(() => channels?.[0]?._id, [channels])
+    const isAdmin = useMemo(() => member?.role === 'admin', [member])
+
+    const [open, setOpen] = useCreateChannelModal()
+
+    useEffect(() => {
+        if (isWorkspaceLoading || isChannelsLoading || isMemberLoading || !member || !workspace) return
+
+        if (channelId) {
+            router.push(`/workspace/${workspaceId}/channel/${channelId}`)
+            return
+        } else if (!open && isAdmin) {
+            setOpen(true)
+        }
+    }, [
+        channelId,
+        isAdmin,
+        isChannelsLoading,
+        isMemberLoading,
+        isWorkspaceLoading,
+        member,
+        open,
+        router,
+        setOpen,
+        workspace,
+        workspaceId,
+    ])
+
+    if (isWorkspaceLoading || isChannelsLoading) {
+        return (
+            <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
+                <Loader className="size-6 animate-spin text-muted-foreground" />
+            </div>
+        )
+    }
+
+    if (!workspace) {
+        return (
+            <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
+                <TriangleAlert className="size-6 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">Workspace not found</span>
+            </div>
+        )
+    }
+
+    return (
+        <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
+            <TriangleAlert className="size-6 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">No channel found</span>
+        </div>
+    )
 }

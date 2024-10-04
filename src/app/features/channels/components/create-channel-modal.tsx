@@ -37,10 +37,11 @@ export const CreateChannelModal = () => {
                     handleClose()
 
                     // redirect to the new channel
+                    toast.success('Channel created successfully')
                     router.push(`/workspace/${workspaceId}/channel/${channelId}`)
                 },
-                onError: (error) => {
-                    toast.error(error.message)
+                onError: () => {
+                    toast.error('Failed to create a channel')
                 },
             },
         )

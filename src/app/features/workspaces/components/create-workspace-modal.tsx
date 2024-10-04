@@ -32,8 +32,8 @@ export const CreateWorkSpaceModal = () => {
                     toast.success('Workspace created successfully')
                     router.replace(`/workspace/${workspaceId}`)
                 },
-                onError: (error) => {
-                    toast.error(error.message)
+                onError: () => {
+                    toast.error('Failed to create a workspace')
                 },
             },
         )
