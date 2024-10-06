@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import Quill from 'quill'
 
@@ -6,11 +6,23 @@ import { useCreateMessage } from '@/app/features/messages/api/use-create-message
 import { useChannelId } from '@/hooks/use-channel-id'
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
 import { toast } from 'sonner'
+import { useGenerateUploadUrl } from '@/app/features/upload/api/use-generate-upload-url'
+import { Id } from '../../../../../../convex/_generated/dataModel'
 
-const Editor = dynamic(() => import('@/components/editor'), { ssr: false })
+const Editor = dynamic(() => import('@/components/editor'), {
+    ssr: false,
+    loading: () => <p className="pb-6 text-center">Loading editor...</p>,
+})
 
 interface ChatInputProps {
     placeholder: string
+}
+
+interface CreateMessageValues {
+    channelId: Id<'channels'>
+    workspaceId: Id<'workspaces'>
+    body: string
+    image?: Id<'_storage'>
 }
 
 export const ChatInput = ({ placeholder }: ChatInputProps) => {
@@ -22,29 +34,74 @@ export const ChatInput = ({ placeholder }: ChatInputProps) => {
     const workspaceId = useWorkspaceId()
     const channelId = useChannelId()
 
-    const { mutate: createMessage, isPending: isCreatingMessage } = useCreateMessage()
+    const { mutate: createMessage } = useCreateMessage()
+    const { mutate: generateUploadUrl } = useGenerateUploadUrl()
 
-    const handleSubmit = async ({ body, image }: { body: string; image: File | null }) => {
-        try {
-            setIsPending(true)
+    const uploadImage = useCallback(
+        async (image: File): Promise<Id<'_storage'> | undefined> => {
+            const maxRetries = 3
+            let attempt = 0
+            while (attempt < maxRetries) {
+                try {
+                    const url = await generateUploadUrl({}, { throwError: true })
+                    if (!url) throw new Error('Failed to generate upload url')
 
-            await createMessage(
-                {
+                    const result = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': image.type },
+                        body: image,
+                    })
+
+                    if (!result.ok) throw new Error('Failed to upload image')
+
+                    const { storageId } = await result.json()
+                    return storageId
+                } catch (error) {
+                    attempt++
+                    if (attempt >= maxRetries) {
+                        console.error('Image upload failed after multiple attempts:', error)
+                        toast.error('Failed to upload image')
+                        return undefined
+                    }
+                }
+            }
+        },
+        [generateUploadUrl],
+    )
+
+    const handleSubmit = useCallback(
+        async ({ body, image }: { body: string; image: File | null }) => {
+            try {
+                setIsPending(true)
+                if (editorRef.current) {
+                    editorRef.current.enable(false)
+                }
+
+                const values: CreateMessageValues = {
                     workspaceId,
                     channelId,
                     body,
-                },
-                { throwError: true },
-            )
+                }
 
-            setEditorKey((prevKey) => prevKey + 1)
-        } catch (error) {
-            console.error('Failed to create message:', error)
-            toast.error('Failed to send message')
-        } finally {
-            setIsPending(false)
-        }
-    }
+                if (image) {
+                    const storageId = await uploadImage(image)
+                    if (storageId) values.image = storageId
+                }
+
+                await createMessage(values, { throwError: true })
+                setEditorKey((prevKey) => prevKey + 1)
+            } catch (error) {
+                console.error('Failed to create message:', error)
+                toast.error('Failed to send message')
+            } finally {
+                setIsPending(false)
+                if (editorRef.current) {
+                    editorRef.current.enable(true)
+                }
+            }
+        },
+        [workspaceId, channelId, createMessage, uploadImage],
+    )
 
     return (
         <div className="px-5 w-full">
