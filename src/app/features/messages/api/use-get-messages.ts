@@ -5,7 +5,7 @@ import { Id } from '../../../../../convex/_generated/dataModel'
 
 const BATCH_SIZE = 20
 
-export type GetMessagesReturnTypes = (typeof api.messages.get._returnType)['page']
+export type GetMessagesReturnType = (typeof api.messages.get._returnType)['page']
 
 interface UseGetMessagesProps {
     channelId?: Id<'channels'>
