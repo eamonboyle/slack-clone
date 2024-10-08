@@ -2,11 +2,11 @@ import { useRef, useState, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import Quill from 'quill'
 
-import { useCreateMessage } from '@/app/features/messages/api/use-create-message'
+import { useCreateMessage } from '@/features/messages/api/use-create-message'
 import { useChannelId } from '@/hooks/use-channel-id'
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
 import { toast } from 'sonner'
-import { useGenerateUploadUrl } from '@/app/features/upload/api/use-generate-upload-url'
+import { useGenerateUploadUrl } from '@/features/upload/api/use-generate-upload-url'
 import { Id } from '../../../../../../convex/_generated/dataModel'
 
 const Editor = dynamic(() => import('@/components/editor'), {
@@ -22,7 +22,7 @@ interface CreateMessageValues {
     channelId: Id<'channels'>
     workspaceId: Id<'workspaces'>
     body: string
-    image?: Id<'_storage'>
+    image: Id<'_storage'> | undefined
 }
 
 export const ChatInput = ({ placeholder }: ChatInputProps) => {
@@ -81,6 +81,7 @@ export const ChatInput = ({ placeholder }: ChatInputProps) => {
                     workspaceId,
                     channelId,
                     body,
+                    image: undefined,
                 }
 
                 if (image) {

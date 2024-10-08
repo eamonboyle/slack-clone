@@ -1,6 +1,6 @@
-import { useGetWorkspace } from '@/app/features/workspaces/api/use-get-workspace'
-import { useGetWorkspaces } from '@/app/features/workspaces/api/use-get-workspaces'
-import { useCreateWorkspaceModal } from '@/app/features/workspaces/store/use-create-workspace-modal'
+import { useGetWorkspace } from '@/features/workspaces/api/use-get-workspace'
+import { useGetWorkspaces } from '@/features/workspaces/api/use-get-workspaces'
+import { useCreateWorkspaceModal } from '@/features/workspaces/store/use-create-workspace-modal'
 
 import { Button } from '@/components/ui/button'
 import {

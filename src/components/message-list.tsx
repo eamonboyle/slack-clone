@@ -1,12 +1,13 @@
-import { GetMessagesReturnType } from '@/app/features/messages/api/use-get-messages'
-import { differenceInMinutes, format, isToday, isYesterday } from 'date-fns'
+import { GetMessagesReturnType } from '@/features/messages/api/use-get-messages'
+import { differenceInMinutes, format } from 'date-fns'
 import { Message } from './message'
 import { ChannelHero } from './channel-hero'
 import { Id } from '../../convex/_generated/dataModel'
 import { useState } from 'react'
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
-import { useCurrentMember } from '@/app/features/members/api/use-current-member'
+import { useCurrentMember } from '@/features/members/api/use-current-member'
 import { Loader } from 'lucide-react'
+import { formatDateLabel } from '@/lib/format-date-label'
 
 const TIME_THRESHOLD = 5
 
@@ -20,17 +21,6 @@ interface MessageListProps {
     loadMore: () => void
     isLoadingMore: boolean
     canLoadMore: boolean
-}
-
-const formatDateLabel = (dateStr: string) => {
-    const date = new Date(dateStr)
-    if (isToday(date)) {
-        return 'Today'
-    } else if (isYesterday(date)) {
-        return 'Yesterday'
-    } else {
-        return format(date, 'EEEE, MMMM d')
-    }
 }
 
 export const MessageList = ({

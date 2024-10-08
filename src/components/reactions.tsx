@@ -1,6 +1,6 @@
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
 import { Doc, Id } from '../../convex/_generated/dataModel'
-import { useCurrentMember } from '@/app/features/members/api/use-current-member'
+import { useCurrentMember } from '@/features/members/api/use-current-member'
 import { cn } from '@/lib/utils'
 import { Hint } from './hint'
 import { EmojiPopover } from './emoji-popover'

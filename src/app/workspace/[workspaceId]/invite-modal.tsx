@@ -1,4 +1,4 @@
-import { useResetWorkspaceJoinCode } from '@/app/features/workspaces/api/use-reset-workspace-join-code'
+import { useResetWorkspaceJoinCode } from '@/features/workspaces/api/use-reset-workspace-join-code'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,

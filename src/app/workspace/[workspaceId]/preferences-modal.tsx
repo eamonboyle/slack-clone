@@ -1,5 +1,5 @@
-import { useDeleteWorkspace } from '@/app/features/workspaces/api/use-delete-workspace'
-import { useUpdateWorkspace } from '@/app/features/workspaces/api/use-update-workspace'
+import { useDeleteWorkspace } from '@/features/workspaces/api/use-delete-workspace'
+import { useUpdateWorkspace } from '@/features/workspaces/api/use-update-workspace'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,

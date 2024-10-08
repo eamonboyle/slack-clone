@@ -1,11 +1,11 @@
 'use client'
 
-import { useGetChannelById } from '@/app/features/channels/api/use-get-channel-by-id'
+import { useGetChannelById } from '@/features/channels/api/use-get-channel-by-id'
 import { useChannelId } from '@/hooks/use-channel-id'
 import { Loader, TriangleAlert } from 'lucide-react'
 import { Header } from './header'
 import { ChatInput } from './chat-input'
-import { useGetMessages } from '@/app/features/messages/api/use-get-messages'
+import { useGetMessages } from '@/features/messages/api/use-get-messages'
 import { MessageList } from '@/components/message-list'
 
 function LoadingState() {
@@ -30,8 +30,6 @@ export default function ChannelIdPage() {
 
     const { data: channel, isLoading: isChannelLoading } = useGetChannelById({ channelId })
     const { results: messages, status, loadMore } = useGetMessages({ channelId })
-
-    console.log(messages)
 
     if (isChannelLoading || status === 'LoadingFirstPage') {
         return <LoadingState />

@@ -7,13 +7,13 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { useChannelId } from '@/hooks/use-channel-id'
 import { Input } from '@/components/ui/input'
 import { DialogClose } from '@radix-ui/react-dialog'
-import { useUpdateChannel } from '@/app/features/channels/api/use-update-channel'
+import { useUpdateChannel } from '@/features/channels/api/use-update-channel'
 import { toast } from 'sonner'
-import { useDeleteChannel } from '@/app/features/channels/api/use-delete-channel'
+import { useDeleteChannel } from '@/features/channels/api/use-delete-channel'
 import { useConfirm } from '@/hooks/use-confirm'
 import { useRouter } from 'next/navigation'
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
-import { useCurrentMember } from '@/app/features/members/api/use-current-member'
+import { useCurrentMember } from '@/features/members/api/use-current-member'
 
 interface HeaderProps {
     title: string
