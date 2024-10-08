@@ -1,18 +1,20 @@
 'use client'
 
-import { useWorkspaceId } from '@/hooks/use-workspace-id'
-import Image from 'next/image'
-
-import VerificationInput from 'react-verification-input'
-import { Button } from '@/components/ui/button'
-import { useJoinWorkspace } from '@/features/workspaces/api/use-join-workspace'
-import { toast } from 'sonner'
-import Link from 'next/link'
-import { useGetWorkspaceInfo } from '@/features/workspaces/api/use-get-workspace-info'
-import { Loader } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { cn } from '@/lib/utils'
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Loader } from 'lucide-react'
+import { toast } from 'sonner'
+import Image from 'next/image'
+import Link from 'next/link'
+import VerificationInput from 'react-verification-input'
+
+import { useWorkspaceId } from '@/hooks/use-workspace-id'
+
+import { useGetWorkspaceInfo } from '@/features/workspaces/api/use-get-workspace-info'
+import { useJoinWorkspace } from '@/features/workspaces/api/use-join-workspace'
+
+import { cn } from '@/lib/utils'
 
 export default function JoinPage() {
     const workspaceId = useWorkspaceId()

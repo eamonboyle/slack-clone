@@ -14,7 +14,7 @@ export default function Sidebar() {
             <SidebarButton icon={MessageSquare} label="DMs" isActive={pathname === '/workspace/dms'} />
             <SidebarButton icon={Bell} label="Activity" isActive={pathname === '/workspace/activity'} />
             <SidebarButton icon={MoreHorizontal} label="More" isActive={pathname === '/workspace/more'} />
-            <div className="flex flex-col items-center justify-center gap-y-1 mt-auto">
+            <div className="flex flex-col items-center justify-center gap-y-1 mt-auto px-4">
                 <UserButton />
             </div>
         </aside>

@@ -1,12 +1,13 @@
 'use client'
 
-import { useGetChannelById } from '@/features/channels/api/use-get-channel-by-id'
-import { useChannelId } from '@/hooks/use-channel-id'
 import { Loader, TriangleAlert } from 'lucide-react'
+
+import { useGetChannelById } from '@/features/channels/api/use-get-channel-by-id'
+import { useGetMessages } from '@/features/messages/api/use-get-messages'
+import { useChannelId } from '@/hooks/use-channel-id'
+import { MessageList } from '@/components/message-list'
 import { Header } from './header'
 import { ChatInput } from './chat-input'
-import { useGetMessages } from '@/features/messages/api/use-get-messages'
-import { MessageList } from '@/components/message-list'
 
 function LoadingState() {
     return (

@@ -21,8 +21,9 @@ export const UserButton = () => {
     }
 
     const handleSignOut = () => {
-        router.replace('/')
-        signOut()
+        signOut().then(() => {
+            router.replace('/')
+        })
     }
 
     const { image, name } = data
