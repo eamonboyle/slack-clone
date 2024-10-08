@@ -1,15 +1,18 @@
 import dynamic from 'next/dynamic'
 import { Doc, Id } from '../../convex/_generated/dataModel'
 import { format, isToday, isYesterday } from 'date-fns'
-import { Hint } from './hint'
+import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
+
+import { useConfirm } from '@/hooks/use-confirm'
+import { useDeleteMessage } from '@/app/features/messages/api/use-delete-message'
+import { useUpdateMessage } from '@/app/features/messages/api/use-update-message'
+import { useToggleReaction } from '@/app/features/reactions/api/use-toggle-reaction'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
+import { Hint } from './hint'
+import { Reactions } from './reactions'
 import { Thumbnail } from './thumbnail'
 import { Toolbar } from './toolbar'
-import { useUpdateMessage } from '@/app/features/messages/api/use-update-message'
-import { toast } from 'sonner'
-import { cn } from '@/lib/utils'
-import { useDeleteMessage } from '@/app/features/messages/api/use-delete-message'
-import { useConfirm } from '@/hooks/use-confirm'
 
 const Renderer = dynamic(() => import('@/components/renderer'), { ssr: false })
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false })
@@ -61,7 +64,9 @@ export const Message = ({
 
     const { mutate: updateMessage, isPending: isUpdatingMessage } = useUpdateMessage()
     const { mutate: deleteMessage, isPending: isDeletingMessage } = useDeleteMessage()
-    const isPending = isUpdatingMessage || isDeletingMessage
+    const { mutate: toggleReaction, isPending: isTogglingReaction } = useToggleReaction()
+
+    const isPending = isUpdatingMessage || isDeletingMessage || isTogglingReaction
 
     const handleUpdateMessage = ({ body }: { body: string }) => {
         updateMessage(
@@ -94,6 +99,17 @@ export const Message = ({
                 },
                 onError: () => {
                     toast.error('Failed to delete message')
+                },
+            },
+        )
+    }
+
+    const handleToggleReaction = (emoji: string) => {
+        toggleReaction(
+            { messageId: id, emoji },
+            {
+                onError: () => {
+                    toast.error('Failed to toggle reaction')
                 },
             },
         )
@@ -132,6 +148,7 @@ export const Message = ({
                                 <Renderer value={body} />
                                 <Thumbnail url={image} />
                                 {updatedAt && <span className="text-xs text-muted-foreground">(edited)</span>}
+                                <Reactions data={reactions} onChange={handleToggleReaction} />
                             </div>
                         )}
                     </div>
@@ -143,7 +160,7 @@ export const Message = ({
                             handleEdit={() => setEditingId(id)}
                             handleThread={() => {}}
                             handleDelete={handleDeleteMessage}
-                            handleReaction={() => {}}
+                            handleReaction={handleToggleReaction}
                             hideThreadButton={hideThreadButton ?? false}
                         />
                     )}
@@ -195,6 +212,7 @@ export const Message = ({
                             <Renderer value={body} />
                             <Thumbnail url={image} />
                             {updatedAt && <span className="text-xs text-muted-foreground">(edited)</span>}
+                            <Reactions data={reactions} onChange={handleToggleReaction} />
                         </div>
                     )}
                 </div>
@@ -206,7 +224,7 @@ export const Message = ({
                         handleEdit={() => setEditingId(id)}
                         handleThread={() => {}}
                         handleDelete={handleDeleteMessage}
-                        handleReaction={() => {}}
+                        handleReaction={handleToggleReaction}
                         hideThreadButton={hideThreadButton ?? false}
                     />
                 )}
