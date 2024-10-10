@@ -13,6 +13,7 @@ import { Loader } from 'lucide-react'
 import { Id } from '../../../../convex/_generated/dataModel'
 import { Thread } from '@/features/messages/components/thread'
 import { Profile } from '@/features/members/components/profile'
+import { useCurrentUser } from '@/features/auth/api/use-current-user'
 
 interface WorkspaceIdLayoutProps {
     children: React.ReactNode
@@ -24,6 +25,26 @@ export default function WorkspaceIdLayout({
     const { parentMessageId, profileMemberId, onClose } = usePanel()
 
     const showPanel = !!parentMessageId || !!profileMemberId
+
+    const { data: user, isLoading: isUserLoading } = useCurrentUser()
+
+    if (isUserLoading) {
+        return (
+            <div className="flex h-full items-center justify-center">
+                <Loader className="size-5 animate-spin text-muted-foreground" />
+            </div>
+        )
+    }
+
+    if (!user) {
+        return (
+            <div className="flex h-full items-center justify-center">
+                <p className="text-red-500">
+                    You must be logged in to access this workspace.
+                </p>
+            </div>
+        )
+    }
 
     return (
         <div className="h-full">

@@ -25,10 +25,16 @@ export const UserButton = () => {
         return null
     }
 
-    const handleSignOut = () => {
-        signOut().then(() => {
-            router.replace('/')
-        })
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            console.log('User signed out successfully');
+            setTimeout(() => {
+                router.push('/auth');
+            }, 0); // Delay the redirect
+        } catch (error) {
+            console.error('Error signing out:', error);
+        }
     }
 
     const { image, name } = data
