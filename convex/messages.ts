@@ -312,7 +312,7 @@ export const create = mutation({
 
 export const update = mutation({
     args: {
-        id: v.id('messages'),
+        messageId: v.id('messages'),
         body: v.string(),
     },
     handler: async (ctx, args) => {
@@ -320,7 +320,7 @@ export const update = mutation({
 
         if (!userId) throw new Error('Unauthorized.')
 
-        const message = await ctx.db.get(args.id)
+        const message = await ctx.db.get(args.messageId)
 
         if (!message) throw new Error('Message not found.')
 
@@ -329,12 +329,12 @@ export const update = mutation({
         if (!member || member._id !== message.memberId)
             throw new Error('Unauthorized.')
 
-        await ctx.db.patch(args.id, {
+        await ctx.db.patch(args.messageId, {
             body: args.body,
             updatedAt: Date.now(),
         })
 
-        return args.id
+        return args.messageId
     },
 })
 
