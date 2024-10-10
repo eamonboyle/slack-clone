@@ -21,16 +21,27 @@ interface InviteModalProps {
     joinCode: string
 }
 
-export const InviteModal = ({ open, setOpen, name, joinCode }: InviteModalProps) => {
+export const InviteModal = ({
+    open,
+    setOpen,
+    name,
+    joinCode,
+}: InviteModalProps) => {
     const workspaceId = useWorkspaceId()
-    const [ConfirmDialog, confirm] = useConfirm('Reset Join Code', 'Are you sure you want to reset the join code?')
+    const [ConfirmDialog, confirm] = useConfirm(
+        'Reset Join Code',
+        'Are you sure you want to reset the join code?',
+    )
 
-    const { mutate: resetJoinCode, isPending: isResettingJoinCode } = useResetWorkspaceJoinCode()
+    const { mutate: resetJoinCode, isPending: isResettingJoinCode } =
+        useResetWorkspaceJoinCode()
 
     const handleCopyToClipboard = () => {
-        navigator.clipboard.writeText(`${window.location.origin}/join/${workspaceId}`).then(() => {
-            toast.success('Copied invite link to clipboard')
-        })
+        navigator.clipboard
+            .writeText(`${window.location.origin}/join/${workspaceId}`)
+            .then(() => {
+                toast.success('Copied invite link to clipboard')
+            })
     }
 
     const handleResetJoinCode = async () => {
@@ -58,7 +69,10 @@ export const InviteModal = ({ open, setOpen, name, joinCode }: InviteModalProps)
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Invite people to {name}</DialogTitle>
-                        <DialogDescription>Use the code below to invite people to your workspace.</DialogDescription>
+                        <DialogDescription>
+                            Use the code below to invite people to your
+                            workspace.
+                        </DialogDescription>
                     </DialogHeader>
                     <div className="flex flex-col gap-y-4 items-center justify-center py-2">
                         <div className="flex items-center">
@@ -69,14 +83,23 @@ export const InviteModal = ({ open, setOpen, name, joinCode }: InviteModalProps)
                                 className="text-2xl font-bold focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:ring-transparent"
                                 autoFocus
                             />
-                            <Button variant="outline" onClick={handleCopyToClipboard} className="ml-2">
+                            <Button
+                                variant="outline"
+                                onClick={handleCopyToClipboard}
+                                className="ml-2"
+                            >
                                 Copy Link <Copy className="size-4 ml-1" />
                             </Button>
                         </div>
                     </div>
                     <div className="flex items-center justify-between w-full">
-                        <Button variant="outline" onClick={handleResetJoinCode} disabled={isResettingJoinCode}>
-                            Reset Join Code <RefreshCcw className="size-4 ml-1" />
+                        <Button
+                            variant="outline"
+                            onClick={handleResetJoinCode}
+                            disabled={isResettingJoinCode}
+                        >
+                            Reset Join Code{' '}
+                            <RefreshCcw className="size-4 ml-1" />
                         </Button>
                         <DialogClose asChild>
                             <Button>Close</Button>

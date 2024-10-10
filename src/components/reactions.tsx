@@ -7,7 +7,12 @@ import { EmojiPopover } from './emoji-popover'
 import { MdOutlineAddReaction } from 'react-icons/md'
 
 interface ReactionsProps {
-    data: Array<Omit<Doc<'reactions'>, 'memberId'> & { count: number; memberIds: Id<'members'>[] }>
+    data: Array<
+        Omit<Doc<'reactions'>, 'memberId'> & {
+            count: number
+            memberIds: Id<'members'>[]
+        }
+    >
     onChange: (emoji: string) => void
 }
 
@@ -38,7 +43,8 @@ export const Reactions = ({ data, onChange }: ReactionsProps) => {
                         <span
                             className={cn(
                                 'text-xs font-semibold text-muted-foreground',
-                                reaction.memberIds.includes(currentMemberId) && 'text-blue-500',
+                                reaction.memberIds.includes(currentMemberId) &&
+                                    'text-blue-500',
                             )}
                         >
                             {reaction.count}
@@ -47,7 +53,10 @@ export const Reactions = ({ data, onChange }: ReactionsProps) => {
                 </Hint>
             ))}
 
-            <EmojiPopover hint="Add reaction" onEmojiSelect={(emoji) => onChange(emoji.native)}>
+            <EmojiPopover
+                hint="Add reaction"
+                onEmojiSelect={(emoji) => onChange(emoji.native)}
+            >
                 <button className="h-7 px-3 rounded-full bg-slate-200/70 border border-transparent hover:border-slate-500 text-slate-800 flex items-center gap-x-1">
                     <MdOutlineAddReaction />
                 </button>

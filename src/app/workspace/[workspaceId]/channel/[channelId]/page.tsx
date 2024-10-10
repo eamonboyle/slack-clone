@@ -21,7 +21,9 @@ function ErrorState() {
     return (
         <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
             <TriangleAlert className="size-6 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Channel not found</span>
+            <span className="text-sm text-muted-foreground">
+                Channel not found
+            </span>
         </div>
     )
 }
@@ -29,8 +31,14 @@ function ErrorState() {
 export default function ChannelIdPage() {
     const channelId = useChannelId()
 
-    const { data: channel, isLoading: isChannelLoading } = useGetChannelById({ channelId })
-    const { results: messages, status, loadMore } = useGetMessages({ channelId })
+    const { data: channel, isLoading: isChannelLoading } = useGetChannelById({
+        channelId,
+    })
+    const {
+        results: messages,
+        status,
+        loadMore,
+    } = useGetMessages({ channelId })
 
     if (isChannelLoading || status === 'LoadingFirstPage') {
         return <LoadingState />

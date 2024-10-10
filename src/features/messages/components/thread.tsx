@@ -50,7 +50,9 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
     const { mutate: generateUploadUrl } = useGenerateUploadUrl()
 
     const { data: currentMember } = useCurrentMember({ workspaceId })
-    const { data: message, isLoading: isLoadingMessage } = useGetMessage({ messageId })
+    const { data: message, isLoading: isLoadingMessage } = useGetMessage({
+        messageId,
+    })
     const {
         results: messages,
         status: messagesStatus,
@@ -66,7 +68,10 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
             let attempt = 0
             while (attempt < maxRetries) {
                 try {
-                    const url = await generateUploadUrl({}, { throwError: true })
+                    const url = await generateUploadUrl(
+                        {},
+                        { throwError: true },
+                    )
                     if (!url) throw new Error('Failed to generate upload url')
 
                     const result = await fetch(url, {
@@ -82,7 +87,10 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
                 } catch (error) {
                     attempt++
                     if (attempt >= maxRetries) {
-                        console.error('Image upload failed after multiple attempts:', error)
+                        console.error(
+                            'Image upload failed after multiple attempts:',
+                            error,
+                        )
                         toast.error('Failed to upload image')
                         return undefined
                     }
@@ -169,7 +177,9 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
                 </div>
                 <div className="flex flex-col gap-y-2 h-full items-center justify-center">
                     <AlertTriangle className="size-5 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">Message not found</p>
+                    <p className="text-sm text-muted-foreground">
+                        Message not found
+                    </p>
                 </div>
             </div>
         )
@@ -184,52 +194,60 @@ export const Thread = ({ messageId, onClose }: ThreadProps) => {
                 </Button>
             </div>
             <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
-                {Object.entries(groupedMessages || {}).map(([dateKey, messages]) => (
-                    <div key={dateKey}>
-                        <div className="text-center my-2 relative">
-                            <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
-                            <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm">
-                                {formatDateLabel(dateKey)}
-                            </span>
+                {Object.entries(groupedMessages || {}).map(
+                    ([dateKey, messages]) => (
+                        <div key={dateKey}>
+                            <div className="text-center my-2 relative">
+                                <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
+                                <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm">
+                                    {formatDateLabel(dateKey)}
+                                </span>
+                            </div>
+                            {messages.map((message, index) => {
+                                if (!message) return null
+
+                                const previousMessage = messages[index - 1]
+                                const isCompact =
+                                    previousMessage &&
+                                    previousMessage.user?._id ===
+                                        message.user?._id &&
+                                    differenceInMinutes(
+                                        new Date(message._creationTime),
+                                        new Date(previousMessage._creationTime),
+                                    ) < TIME_THRESHOLD
+
+                                return (
+                                    <Message
+                                        hideThreadButton
+                                        key={message._id}
+                                        id={message._id}
+                                        memberId={message.memberId}
+                                        authorImage={message.user.image}
+                                        authorName={message.user.name}
+                                        isAuthor={
+                                            message.memberId ===
+                                            currentMember?._id
+                                        }
+                                        reactions={message.reactions}
+                                        body={message.body}
+                                        image={message.image}
+                                        updatedAt={message.updatedAt}
+                                        createdAt={message._creationTime}
+                                        isEditing={editingId === message._id}
+                                        setEditingId={setEditingId}
+                                        isCompact={isCompact ?? false}
+                                        threadCount={message.threadCount}
+                                        threadImage={message.threadImage}
+                                        threadName={message.threadName}
+                                        threadTimestamp={
+                                            message.threadTimestamp
+                                        }
+                                    />
+                                )
+                            })}
                         </div>
-                        {messages.map((message, index) => {
-                            if (!message) return null
-
-                            const previousMessage = messages[index - 1]
-                            const isCompact =
-                                previousMessage &&
-                                previousMessage.user?._id === message.user?._id &&
-                                differenceInMinutes(
-                                    new Date(message._creationTime),
-                                    new Date(previousMessage._creationTime),
-                                ) < TIME_THRESHOLD
-
-                            return (
-                                <Message
-                                    hideThreadButton
-                                    key={message._id}
-                                    id={message._id}
-                                    memberId={message.memberId}
-                                    authorImage={message.user.image}
-                                    authorName={message.user.name}
-                                    isAuthor={message.memberId === currentMember?._id}
-                                    reactions={message.reactions}
-                                    body={message.body}
-                                    image={message.image}
-                                    updatedAt={message.updatedAt}
-                                    createdAt={message._creationTime}
-                                    isEditing={editingId === message._id}
-                                    setEditingId={setEditingId}
-                                    isCompact={isCompact ?? false}
-                                    threadCount={message.threadCount}
-                                    threadImage={message.threadImage}
-                                    threadName={message.threadName}
-                                    threadTimestamp={message.threadTimestamp}
-                                />
-                            )
-                        })}
-                    </div>
-                ))}
+                    ),
+                )}
 
                 <div
                     className="h-1"

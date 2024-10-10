@@ -12,7 +12,12 @@ interface WorkspaceSectionProps {
     onNew?: () => void
 }
 
-export const WorkspaceSection = ({ children, label, hint, onNew }: WorkspaceSectionProps) => {
+export const WorkspaceSection = ({
+    children,
+    label,
+    hint,
+    onNew,
+}: WorkspaceSectionProps) => {
     const [on, toggle] = useToggle(true)
 
     return (
@@ -23,7 +28,12 @@ export const WorkspaceSection = ({ children, label, hint, onNew }: WorkspaceSect
                     variant="transparent"
                     className="p-0.5 text-sm text-[#F9EDFFCC] shrink-0 size-6"
                 >
-                    <FaCaretRight className={cn('size-4 transition-transform', on && 'rotate-90')} />
+                    <FaCaretRight
+                        className={cn(
+                            'size-4 transition-transform',
+                            on && 'rotate-90',
+                        )}
+                    />
                 </Button>
                 <Button
                     variant="transparent"

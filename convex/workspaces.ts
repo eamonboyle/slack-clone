@@ -3,7 +3,13 @@ import { mutation, query } from './_generated/server'
 import { getAuthUserId } from '@convex-dev/auth/server'
 
 const generateJoinCode = () => {
-    const code = Array.from({ length: 6 }, () => '0123456789abcdefghijklmnopqrstuvwxyz'[Math.floor(Math.random() * 36)])
+    const code = Array.from(
+        { length: 6 },
+        () =>
+            '0123456789abcdefghijklmnopqrstuvwxyz'[
+                Math.floor(Math.random() * 36)
+            ],
+    )
 
     return code.join('')
 }
@@ -85,7 +91,9 @@ export const getInfoById = query({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         const workspace = await ctx.db.get(args.workspaceId)
@@ -110,7 +118,9 @@ export const getById = query({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member) {
@@ -135,7 +145,9 @@ export const update = mutation({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member || member.role !== 'admin') {
@@ -163,7 +175,9 @@ export const deleteById = mutation({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member || member.role !== 'admin') {
@@ -173,7 +187,9 @@ export const deleteById = mutation({
         const [members] = await Promise.all([
             ctx.db
                 .query('members')
-                .withIndex('by_workspace_id', (q) => q.eq('workspaceId', args.workspaceId))
+                .withIndex('by_workspace_id', (q) =>
+                    q.eq('workspaceId', args.workspaceId),
+                )
                 .collect(),
         ])
 
@@ -201,7 +217,9 @@ export const resetJoinCode = mutation({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member || member.role !== 'admin') {
@@ -244,7 +262,9 @@ export const join = mutation({
         // check if the user is already a member
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (member) {

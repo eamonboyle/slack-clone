@@ -28,11 +28,21 @@ interface SidebarItemProps {
     variant?: VariantProps<typeof sidebarItemVariants>['variant']
 }
 
-export const SidebarItem = ({ label, icon: Icon, id, variant }: SidebarItemProps) => {
+export const SidebarItem = ({
+    label,
+    icon: Icon,
+    id,
+    variant,
+}: SidebarItemProps) => {
     const workspaceId = useWorkspaceId()
 
     return (
-        <Button variant="transparent" size="sm" className={cn(sidebarItemVariants({ variant }))} asChild>
+        <Button
+            variant="transparent"
+            size="sm"
+            className={cn(sidebarItemVariants({ variant }))}
+            asChild
+        >
             <Link href={`/workspace/${workspaceId}/channel/${id}`}>
                 <Icon className="size-3.5 mr-1 shrink-0" />
                 <span className="truncate text-sm">{label}</span>

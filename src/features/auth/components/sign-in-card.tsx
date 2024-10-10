@@ -1,5 +1,11 @@
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { FaGithub } from 'react-icons/fa'
@@ -49,7 +55,9 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
         <Card className="w-full h-full p-8">
             <CardHeader className="px-0 pt-0">
                 <CardTitle>Log in to continue</CardTitle>
-                <CardDescription>Use your email or another service to continue</CardDescription>
+                <CardDescription>
+                    Use your email or another service to continue
+                </CardDescription>
             </CardHeader>
             {error && (
                 <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive mb-6">
@@ -75,7 +83,12 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
                         type="password"
                         required
                     />
-                    <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                    <Button
+                        type="submit"
+                        className="w-full"
+                        size="lg"
+                        disabled={isLoading}
+                    >
                         Continue
                     </Button>
                 </form>
@@ -108,7 +121,10 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
                 </div>
                 <p className="text-xs text-muted-foreground">
                     Don&apos;t have an account?{' '}
-                    <span className="text-sky-700 hover:underline cursor-pointer" onClick={() => setState('signUp')}>
+                    <span
+                        className="text-sky-700 hover:underline cursor-pointer"
+                        onClick={() => setState('signUp')}
+                    >
                         Sign up
                     </span>
                 </p>

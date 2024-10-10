@@ -14,9 +14,15 @@ export default function WorkspaceIdPage() {
     const router = useRouter()
     const workspaceId = useWorkspaceId()
 
-    const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
-    const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({ workspaceId })
-    const { data: channels, isLoading: isChannelsLoading } = useGetChannels({ workspaceId })
+    const { data: member, isLoading: isMemberLoading } = useCurrentMember({
+        workspaceId,
+    })
+    const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({
+        workspaceId,
+    })
+    const { data: channels, isLoading: isChannelsLoading } = useGetChannels({
+        workspaceId,
+    })
 
     const channelId = useMemo(() => channels?.[0]?._id, [channels])
     const isAdmin = useMemo(() => member?.role === 'admin', [member])
@@ -24,7 +30,14 @@ export default function WorkspaceIdPage() {
     const [open, setOpen] = useCreateChannelModal()
 
     useEffect(() => {
-        if (isWorkspaceLoading || isChannelsLoading || isMemberLoading || !member || !workspace) return
+        if (
+            isWorkspaceLoading ||
+            isChannelsLoading ||
+            isMemberLoading ||
+            !member ||
+            !workspace
+        )
+            return
 
         if (channelId) {
             router.push(`/workspace/${workspaceId}/channel/${channelId}`)
@@ -58,7 +71,9 @@ export default function WorkspaceIdPage() {
         return (
             <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
                 <TriangleAlert className="size-5 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">Workspace not found</span>
+                <span className="text-sm text-muted-foreground">
+                    Workspace not found
+                </span>
             </div>
         )
     }
@@ -66,7 +81,9 @@ export default function WorkspaceIdPage() {
     return (
         <div className="h-full flex-1 flex items-center justify-center flex-col gap-2">
             <TriangleAlert className="size-5 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">No channel found</span>
+            <span className="text-sm text-muted-foreground">
+                No channel found
+            </span>
         </div>
     )
 }

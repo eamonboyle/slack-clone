@@ -1,6 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useState } from 'react'
 
 import data from '@emoji-mart/data'
@@ -12,7 +21,11 @@ interface EmojiPopoverProps {
     onEmojiSelect: (emoji: any) => void
 }
 
-export const EmojiPopover = ({ children, hint = 'emoji', onEmojiSelect }: EmojiPopoverProps) => {
+export const EmojiPopover = ({
+    children,
+    hint = 'emoji',
+    onEmojiSelect,
+}: EmojiPopoverProps) => {
     const [popoverOpen, setPopoverOpen] = useState(false)
     const [tooltipOpen, setTooltipOpen] = useState(false)
 
@@ -27,7 +40,11 @@ export const EmojiPopover = ({ children, hint = 'emoji', onEmojiSelect }: EmojiP
     return (
         <TooltipProvider>
             <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-                <Tooltip open={tooltipOpen} onOpenChange={setTooltipOpen} delayDuration={50}>
+                <Tooltip
+                    open={tooltipOpen}
+                    onOpenChange={setTooltipOpen}
+                    delayDuration={50}
+                >
                     <PopoverTrigger asChild>
                         <TooltipTrigger asChild>{children}</TooltipTrigger>
                     </PopoverTrigger>

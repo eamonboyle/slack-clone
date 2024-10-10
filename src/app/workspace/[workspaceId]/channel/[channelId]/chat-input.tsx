@@ -44,7 +44,10 @@ export const ChatInput = ({ placeholder }: ChatInputProps) => {
             let attempt = 0
             while (attempt < maxRetries) {
                 try {
-                    const url = await generateUploadUrl({}, { throwError: true })
+                    const url = await generateUploadUrl(
+                        {},
+                        { throwError: true },
+                    )
                     if (!url) throw new Error('Failed to generate upload url')
 
                     const result = await fetch(url, {
@@ -60,7 +63,10 @@ export const ChatInput = ({ placeholder }: ChatInputProps) => {
                 } catch (error) {
                     attempt++
                     if (attempt >= maxRetries) {
-                        console.error('Image upload failed after multiple attempts:', error)
+                        console.error(
+                            'Image upload failed after multiple attempts:',
+                            error,
+                        )
                         toast.error('Failed to upload image')
                         return undefined
                     }

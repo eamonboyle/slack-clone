@@ -8,7 +8,13 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Hint } from '@/components/hint'
 import { Doc } from '../../../../convex/_generated/dataModel'
-import { ChevronDown, ListFilter, Settings, SquarePen, UserPlus } from 'lucide-react'
+import {
+    ChevronDown,
+    ListFilter,
+    Settings,
+    SquarePen,
+    UserPlus,
+} from 'lucide-react'
 import { PreferencesModal } from './preferences-modal'
 import { useState } from 'react'
 import { InviteModal } from './invite-modal'
@@ -18,7 +24,10 @@ interface WorkspaceHeaderProps {
     isAdmin: boolean
 }
 
-export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceHeaderProps) => {
+export const WorkspaceHeader = ({
+    workspace,
+    isAdmin,
+}: WorkspaceHeaderProps) => {
     const [isPreferencesModalOpen, setIsPreferencesModalOpen] = useState(false)
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
 
@@ -47,14 +56,20 @@ export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceHeaderProps) =>
                             <ChevronDown className="size-4 ml-1 shrink-0" />
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent side="bottom" align="start" className="w-64">
+                    <DropdownMenuContent
+                        side="bottom"
+                        align="start"
+                        className="w-64"
+                    >
                         <DropdownMenuItem className="cursor-pointer capitalize">
                             <div className="size-9 relative overflow-hidden bg-[#616061] text-white font-semibold text-xl rounded-md flex items-center justify-center mr-2">
                                 {workspace.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="flex flex-col items-start">
                                 <p className="font-bold">{workspace.name}</p>
-                                <p className="text-muted-foreground text-xs">Active Workspace</p>
+                                <p className="text-muted-foreground text-xs">
+                                    Active Workspace
+                                </p>
                             </div>
                         </DropdownMenuItem>
                         {isAdmin && (
@@ -69,7 +84,9 @@ export const WorkspaceHeader = ({ workspace, isAdmin }: WorkspaceHeaderProps) =>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="cursor-pointer py-2"
-                                    onClick={() => setIsPreferencesModalOpen(true)}
+                                    onClick={() =>
+                                        setIsPreferencesModalOpen(true)
+                                    }
                                 >
                                     <Settings className="size-4 mr-2" />
                                     Preferences

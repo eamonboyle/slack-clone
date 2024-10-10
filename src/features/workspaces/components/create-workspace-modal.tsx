@@ -1,6 +1,12 @@
 'use client'
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 import { useCreateWorkspaceModal } from '../store/use-create-workspace-modal'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -44,7 +50,10 @@ export const CreateWorkSpaceModal = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Create a new workspace</DialogTitle>
-                    <DialogDescription>A workspace is a collection of conversations and documents.</DialogDescription>
+                    <DialogDescription>
+                        A workspace is a collection of conversations and
+                        documents.
+                    </DialogDescription>
                 </DialogHeader>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <Input

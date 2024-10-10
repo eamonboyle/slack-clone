@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useMutation } from 'convex/react'
-
 import { useCallback, useMemo, useState } from 'react'
+import { useMutation } from 'convex/react'
 
 import { api } from '../../../../convex/_generated/api'
 import { Id } from '../../../../convex/_generated/dataModel'
 
 type RequestType = {
-    workspaceId: Id<'workspaces'>
+    memberId: Id<'members'>
+    role: 'admin' | 'member'
 }
-type ResponseType = Id<'workspaces'> | null
+type ResponseType = Id<'members'> | null
 
 type Options = {
     onSuccess?: (data: ResponseType) => void
@@ -18,7 +17,7 @@ type Options = {
     throwError?: boolean
 }
 
-export const useDeleteWorkspace = () => {
+export const useUpdateMember = () => {
     const [data, setData] = useState<ResponseType>(null)
     const [error, setError] = useState<Error | null>(null)
 
@@ -31,7 +30,7 @@ export const useDeleteWorkspace = () => {
     const isError = useMemo(() => status === 'error', [status])
     const isSettled = useMemo(() => status === 'settled', [status])
 
-    const mutation = useMutation(api.workspaces.deleteById)
+    const mutation = useMutation(api.members.update)
 
     const mutate = useCallback(
         async (values: RequestType, options?: Options) => {

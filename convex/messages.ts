@@ -9,7 +9,9 @@ import { type QueryCtx, mutation, query } from './_generated/server'
 const populateThread = async (ctx: QueryCtx, messageId: Id<'messages'>) => {
     const messages = await ctx.db
         .query('messages')
-        .withIndex('by_parent_message_id', (q) => q.eq('parentMessageId', messageId))
+        .withIndex('by_parent_message_id', (q) =>
+            q.eq('parentMessageId', messageId),
+        )
         .collect()
 
     if (messages.length === 0) {
@@ -58,10 +60,16 @@ const populateMember = (ctx: QueryCtx, memberId: Id<'members'>) => {
     return ctx.db.get(memberId)
 }
 
-const getMember = async (ctx: QueryCtx, workspaceId: Id<'workspaces'>, userId: Id<'users'>) => {
+const getMember = async (
+    ctx: QueryCtx,
+    workspaceId: Id<'workspaces'>,
+    userId: Id<'users'>,
+) => {
     return await ctx.db
         .query('members')
-        .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', workspaceId).eq('userId', userId))
+        .withIndex('by_workspace_id_user_id', (q) =>
+            q.eq('workspaceId', workspaceId).eq('userId', userId),
+        )
         .unique()
 }
 
@@ -104,30 +112,52 @@ export const get = query({
             page: (
                 await Promise.all(
                     results.page.map(async (message) => {
-                        const member = await populateMember(ctx, message.memberId)
-                        const user = member ? await populateUser(ctx, member?.userId) : null
+                        const member = await populateMember(
+                            ctx,
+                            message.memberId,
+                        )
+                        const user = member
+                            ? await populateUser(ctx, member?.userId)
+                            : null
 
                         if (!member || !user) return null
 
-                        const reactions = await populateReactions(ctx, message._id)
+                        const reactions = await populateReactions(
+                            ctx,
+                            message._id,
+                        )
                         const thread = await populateThread(ctx, message._id)
-                        const image = message.image ? await ctx.storage.getUrl(message.image) : undefined
+                        const image = message.image
+                            ? await ctx.storage.getUrl(message.image)
+                            : undefined
 
-                        const reactionsWithCounts = reactions.map((reaction) => ({
-                            ...reaction,
-                            count: reactions.filter((r) => r.value === reaction.value).length,
-                        }))
+                        const reactionsWithCounts = reactions.map(
+                            (reaction) => ({
+                                ...reaction,
+                                count: reactions.filter(
+                                    (r) => r.value === reaction.value,
+                                ).length,
+                            }),
+                        )
 
                         const dedupedReactions = reactionsWithCounts.reduce(
                             (acc, reaction) => {
-                                const existingReaction = acc.find((r) => r.value === reaction.value)
+                                const existingReaction = acc.find(
+                                    (r) => r.value === reaction.value,
+                                )
 
                                 if (existingReaction) {
                                     existingReaction.memberIds = Array.from(
-                                        new Set([...existingReaction.memberIds, reaction.memberId]),
+                                        new Set([
+                                            ...existingReaction.memberIds,
+                                            reaction.memberId,
+                                        ]),
                                     )
                                 } else {
-                                    acc.push({ ...reaction, memberIds: [reaction.memberId] })
+                                    acc.push({
+                                        ...reaction,
+                                        memberIds: [reaction.memberId],
+                                    })
                                 }
 
                                 return acc
@@ -138,7 +168,10 @@ export const get = query({
                             })[],
                         )
 
-                        const reactionsWithoutMemberIdProperty = dedupedReactions.map(({ memberId, ...rest }) => rest)
+                        const reactionsWithoutMemberIdProperty =
+                            dedupedReactions.map(
+                                ({ memberId, ...rest }) => rest,
+                            )
 
                         return {
                             ...message,
@@ -153,7 +186,10 @@ export const get = query({
                         }
                     }),
                 )
-            ).filter((message): message is NonNullable<typeof message> => message !== null),
+            ).filter(
+                (message): message is NonNullable<typeof message> =>
+                    message !== null,
+            ),
         }
     },
 })
@@ -192,10 +228,17 @@ export const getById = query({
 
         const dedupedReactions = reactionsWithCounts.reduce(
             (acc, reaction) => {
-                const existingReaction = acc.find((r) => r.value === reaction.value)
+                const existingReaction = acc.find(
+                    (r) => r.value === reaction.value,
+                )
 
                 if (existingReaction) {
-                    existingReaction.memberIds = Array.from(new Set([...existingReaction.memberIds, reaction.memberId]))
+                    existingReaction.memberIds = Array.from(
+                        new Set([
+                            ...existingReaction.memberIds,
+                            reaction.memberId,
+                        ]),
+                    )
                 } else {
                     acc.push({ ...reaction, memberIds: [reaction.memberId] })
                 }
@@ -208,11 +251,15 @@ export const getById = query({
             })[],
         )
 
-        const reactionsWithoutMemberIdProperty = dedupedReactions.map(({ memberId, ...rest }) => rest)
+        const reactionsWithoutMemberIdProperty = dedupedReactions.map(
+            ({ memberId, ...rest }) => rest,
+        )
 
         return {
             ...message,
-            image: message.image ? await ctx.storage.getUrl(message.image) : undefined,
+            image: message.image
+                ? await ctx.storage.getUrl(message.image)
+                : undefined,
             user,
             member,
             reactions: reactionsWithoutMemberIdProperty,
@@ -279,7 +326,8 @@ export const update = mutation({
 
         const member = await getMember(ctx, message.workspaceId, userId)
 
-        if (!member || member._id !== message.memberId) throw new Error('Unauthorized.')
+        if (!member || member._id !== message.memberId)
+            throw new Error('Unauthorized.')
 
         await ctx.db.patch(args.id, {
             body: args.body,
@@ -305,7 +353,8 @@ export const remove = mutation({
 
         const member = await getMember(ctx, message.workspaceId, userId)
 
-        if (!member || member._id !== message.memberId) throw new Error('Unauthorized.')
+        if (!member || member._id !== message.memberId)
+            throw new Error('Unauthorized.')
 
         await ctx.db.delete(args.messageId)
 

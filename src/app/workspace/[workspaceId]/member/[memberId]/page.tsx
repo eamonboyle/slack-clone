@@ -15,7 +15,8 @@ export default function MemberIdPage() {
     const workspaceId = useWorkspaceId()
     const memberId = useMemberId()
 
-    const [conversationId, setConversationId] = useState<Id<'conversations'> | null>(null)
+    const [conversationId, setConversationId] =
+        useState<Id<'conversations'> | null>(null)
 
     const { mutate, isPending } = useCreateOrGetConversation()
 
@@ -51,7 +52,9 @@ export default function MemberIdPage() {
         return (
             <div className="flex flex-col gap-2 h-full items-center justify-center">
                 <AlertTriangle className="size-5 text-muted-foreground" />
-                <p className="text-muted-foreground">Failed to create or get conversation</p>
+                <p className="text-muted-foreground">
+                    Failed to create or get conversation
+                </p>
             </div>
         )
     }

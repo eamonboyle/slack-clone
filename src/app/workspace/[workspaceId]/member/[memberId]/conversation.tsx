@@ -14,7 +14,9 @@ interface ConversationProps {
 export const Conversation = ({ id }: ConversationProps) => {
     const memberId = useMemberId()
 
-    const { data: member, isLoading: isMemberLoading } = useGetMember({ memberId })
+    const { data: member, isLoading: isMemberLoading } = useGetMember({
+        memberId,
+    })
     const { results, status, loadMore } = useGetMessages({ conversationId: id })
 
     if (isMemberLoading || status === 'LoadingFirstPage') {
@@ -27,7 +29,11 @@ export const Conversation = ({ id }: ConversationProps) => {
 
     return (
         <div className="flex flex-col h-full">
-            <Header memberName={member?.user.name} memberImage={member?.user.image} onClick={() => {}} />
+            <Header
+                memberName={member?.user.name}
+                memberImage={member?.user.image}
+                onClick={() => {}}
+            />
             <MessageList
                 variant="conversation"
                 data={results}
@@ -37,7 +43,10 @@ export const Conversation = ({ id }: ConversationProps) => {
                 isLoadingMore={status === 'LoadingMore'}
                 canLoadMore={status === 'CanLoadMore'}
             />
-            <ChatInput placeholder={`Message ${member?.user.name}`} conversationId={id} />
+            <ChatInput
+                placeholder={`Message ${member?.user.name}`}
+                conversationId={id}
+            />
         </div>
     )
 }

@@ -3,7 +3,14 @@ import { FaChevronDown } from 'react-icons/fa'
 import { Trash } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog'
 import { useChannelId } from '@/hooks/use-channel-id'
 import { Input } from '@/components/ui/input'
 import { DialogClose } from '@radix-ui/react-dialog'
@@ -34,8 +41,10 @@ export const Header = ({ title }: HeaderProps) => {
     const workspaceId = useWorkspaceId()
 
     const { data: member } = useCurrentMember({ workspaceId })
-    const { mutate: updateChannel, isPending: isUpdatingChannel } = useUpdateChannel()
-    const { mutate: deleteChannel, isPending: isDeletingChannel } = useDeleteChannel()
+    const { mutate: updateChannel, isPending: isUpdatingChannel } =
+        useUpdateChannel()
+    const { mutate: deleteChannel, isPending: isDeletingChannel } =
+        useDeleteChannel()
 
     const handleEditOpen = (value: boolean) => {
         if (member?.role !== 'admin') return
@@ -89,7 +98,11 @@ export const Header = ({ title }: HeaderProps) => {
             <ConfirmDialog />
             <Dialog>
                 <DialogTrigger asChild>
-                    <Button variant="ghost" className="text-lg font-semibold px-2 overflow-hidden w-auto" size="sm">
+                    <Button
+                        variant="ghost"
+                        className="text-lg font-semibold px-2 overflow-hidden w-auto"
+                        size="sm"
+                    >
                         <span className="trunacte"># {title}</span>
                         <FaChevronDown className="size-2.5 ml-2" />
                     </Button>
@@ -103,8 +116,12 @@ export const Header = ({ title }: HeaderProps) => {
                             <DialogTrigger asChild>
                                 <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-sm font-semibold">Channel name</p>
-                                        <p className="text-sm text-[#126483] hover:underline font-semibold">edit</p>
+                                        <p className="text-sm font-semibold">
+                                            Channel name
+                                        </p>
+                                        <p className="text-sm text-[#126483] hover:underline font-semibold">
+                                            edit
+                                        </p>
                                     </div>
                                     <p className="text-sm"># {title}</p>
                                 </div>
@@ -113,7 +130,10 @@ export const Header = ({ title }: HeaderProps) => {
                                 <DialogHeader>
                                     <DialogTitle>Edit channel name</DialogTitle>
                                 </DialogHeader>
-                                <form className="space-y-4" onSubmit={handleSubmit}>
+                                <form
+                                    className="space-y-4"
+                                    onSubmit={handleSubmit}
+                                >
                                     <Input
                                         value={value}
                                         onChange={handleChange}
@@ -126,11 +146,16 @@ export const Header = ({ title }: HeaderProps) => {
                                     />
                                     <DialogFooter>
                                         <DialogClose asChild>
-                                            <Button variant="outline" disabled={isUpdatingChannel}>
+                                            <Button
+                                                variant="outline"
+                                                disabled={isUpdatingChannel}
+                                            >
                                                 Cancel
                                             </Button>
                                         </DialogClose>
-                                        <Button disabled={isUpdatingChannel}>Save</Button>
+                                        <Button disabled={isUpdatingChannel}>
+                                            Save
+                                        </Button>
                                     </DialogFooter>
                                 </form>
                             </DialogContent>
@@ -142,7 +167,9 @@ export const Header = ({ title }: HeaderProps) => {
                                 className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg cursor-pointer border hover:bg-gray-50 text-rose-600"
                             >
                                 <Trash className="size-4" />
-                                <p className="text-sm font-semibold">Delete channel</p>
+                                <p className="text-sm font-semibold">
+                                    Delete channel
+                                </p>
                             </button>
                         )}
                     </div>

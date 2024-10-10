@@ -20,8 +20,11 @@ export default function JoinPage() {
     const workspaceId = useWorkspaceId()
     const router = useRouter()
 
-    const { data: workspaceInfo, isLoading } = useGetWorkspaceInfo({ workspaceId })
-    const { mutate: joinWorkspace, isPending: isJoiningWorkspace } = useJoinWorkspace()
+    const { data: workspaceInfo, isLoading } = useGetWorkspaceInfo({
+        workspaceId,
+    })
+    const { mutate: joinWorkspace, isPending: isJoiningWorkspace } =
+        useJoinWorkspace()
 
     const isMember = useMemo(() => workspaceInfo?.isMember, [workspaceInfo])
 
@@ -60,11 +63,21 @@ export default function JoinPage() {
 
     return (
         <div className="h-full flex flex-col gap-y-8 items-center justify-center bg-white p-8">
-            <Image src="/logo.svg" alt="Logo" width={60} height={60} className="w-auto h-auto" />
+            <Image
+                src="/logo.svg"
+                alt="Logo"
+                width={60}
+                height={60}
+                className="w-auto h-auto"
+            />
             <div className="flex flex-col gap-y-4 items-center justify-center max-w-md">
                 <div className="flex flex-col gap-y-2 items-center justify-center">
-                    <h1 className="text-2xl font-bold">Join {workspaceInfo?.name}</h1>
-                    <p className="text-sm text-muted-foreground">Enter the join code to join the workspace</p>
+                    <h1 className="text-2xl font-bold">
+                        Join {workspaceInfo?.name}
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        Enter the join code to join the workspace
+                    </p>
                     <div className="my-2">
                         <VerificationInput
                             onComplete={handleJoinWorkspace}
@@ -72,7 +85,8 @@ export default function JoinPage() {
                             classNames={{
                                 container: cn(
                                     'flex gap-x-2',
-                                    isJoiningWorkspace && 'opacity-50 pointer-events-none cursor-not-allowed',
+                                    isJoiningWorkspace &&
+                                        'opacity-50 pointer-events-none cursor-not-allowed',
                                 ),
                                 character:
                                     'uppercase h-auto rounded-md border border-gray-300 flex items-center justify-center text-lg font-medium text-gray-500',

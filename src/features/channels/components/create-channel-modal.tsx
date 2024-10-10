@@ -1,6 +1,12 @@
 import { useState } from 'react'
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from '@/components/ui/dialog'
 import { useCreateChannel } from '../api/use-create-channel'
 import { useCreateChannelModal } from '../store/use-create-channel-modal'
 import { Input } from '@/components/ui/input'
@@ -38,7 +44,9 @@ export const CreateChannelModal = () => {
 
                     // redirect to the new channel
                     toast.success('Channel created successfully')
-                    router.push(`/workspace/${workspaceId}/channel/${channelId}`)
+                    router.push(
+                        `/workspace/${workspaceId}/channel/${channelId}`,
+                    )
                 },
                 onError: () => {
                     toast.error('Failed to create a channel')
@@ -52,7 +60,10 @@ export const CreateChannelModal = () => {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Create a new channel</DialogTitle>
-                    <DialogDescription>A channel is a collection of conversations and documents.</DialogDescription>
+                    <DialogDescription>
+                        A channel is a collection of conversations and
+                        documents.
+                    </DialogDescription>
                 </DialogHeader>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <Input

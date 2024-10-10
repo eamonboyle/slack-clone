@@ -1,7 +1,12 @@
 import { useCurrentMember } from '@/features/members/api/use-current-member'
 import { useGetWorkspace } from '@/features/workspaces/api/use-get-workspace'
 import { useWorkspaceId } from '@/hooks/use-workspace-id'
-import { AlertTriangle, Loader, MessageSquareText, SendHorizonal } from 'lucide-react'
+import {
+    AlertTriangle,
+    Loader,
+    MessageSquareText,
+    SendHorizonal,
+} from 'lucide-react'
 import { WorkspaceHeader } from './workspace-header'
 import { SidebarItem } from './sidebar-item'
 import { useGetChannels } from '@/features/channels/api/use-get-channels'
@@ -20,12 +25,25 @@ export const WorkspaceSidebar = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_open, setOpen] = useCreateChannelModal()
 
-    const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({ workspaceId })
-    const { data: channels, isLoading: isChannelsLoading } = useGetChannels({ workspaceId })
-    const { data: members, isLoading: isMembersLoading } = useGetMembers({ workspaceId })
-    const { data: member, isLoading: isMemberLoading } = useCurrentMember({ workspaceId })
+    const { data: workspace, isLoading: isWorkspaceLoading } = useGetWorkspace({
+        workspaceId,
+    })
+    const { data: channels, isLoading: isChannelsLoading } = useGetChannels({
+        workspaceId,
+    })
+    const { data: members, isLoading: isMembersLoading } = useGetMembers({
+        workspaceId,
+    })
+    const { data: member, isLoading: isMemberLoading } = useCurrentMember({
+        workspaceId,
+    })
 
-    if (isMemberLoading || isWorkspaceLoading || isChannelsLoading || isMembersLoading) {
+    if (
+        isMemberLoading ||
+        isWorkspaceLoading ||
+        isChannelsLoading ||
+        isMembersLoading
+    ) {
         return (
             <div className="flex flex-col bg-[#5E2C5F] h-full items-center justify-center">
                 <Loader className="size-5 animate-spin text-white" />
@@ -44,17 +62,30 @@ export const WorkspaceSidebar = () => {
 
     return (
         <div className="flex flex-col bg-[#5E2C5F] h-full">
-            <WorkspaceHeader workspace={workspace} isAdmin={member.role === 'admin'} />
+            <WorkspaceHeader
+                workspace={workspace}
+                isAdmin={member.role === 'admin'}
+            />
 
             <div className="flex flex-col px-2 mt-3">
-                <SidebarItem label="Threads" icon={MessageSquareText} id="threads" />
-                <SidebarItem label="Drafts & Sent" icon={SendHorizonal} id="drafts-sent" />
+                <SidebarItem
+                    label="Threads"
+                    icon={MessageSquareText}
+                    id="threads"
+                />
+                <SidebarItem
+                    label="Drafts & Sent"
+                    icon={SendHorizonal}
+                    id="drafts-sent"
+                />
             </div>
 
             <WorkspaceSection
                 label="Channels"
                 hint="Add a channel"
-                onNew={member.role === 'admin' ? () => setOpen(true) : undefined}
+                onNew={
+                    member.role === 'admin' ? () => setOpen(true) : undefined
+                }
             >
                 {channels?.map((item) => (
                     <SidebarItem
@@ -67,7 +98,11 @@ export const WorkspaceSidebar = () => {
                 ))}
             </WorkspaceSection>
 
-            <WorkspaceSection label="Direct Messages" hint="Add a direct message" onNew={() => {}}>
+            <WorkspaceSection
+                label="Direct Messages"
+                hint="Add a direct message"
+                onNew={() => {}}
+            >
                 {members?.map((item) => (
                     <UserItem
                         key={item._id}

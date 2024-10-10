@@ -15,7 +15,9 @@ export const get = query({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member) {
@@ -24,7 +26,9 @@ export const get = query({
 
         const channels = await ctx.db
             .query('channels')
-            .withIndex('by_workspace_id', (q) => q.eq('workspaceId', args.workspaceId))
+            .withIndex('by_workspace_id', (q) =>
+                q.eq('workspaceId', args.workspaceId),
+            )
             .collect()
 
         return channels
@@ -50,7 +54,9 @@ export const getById = query({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', channel.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', channel.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member) {
@@ -75,7 +81,9 @@ export const create = mutation({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', args.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', args.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (member === null || member.role !== 'admin') {
@@ -113,7 +121,9 @@ export const update = mutation({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', channel.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', channel.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member || member.role !== 'admin') {
@@ -147,7 +157,9 @@ export const deleteChannel = mutation({
 
         const member = await ctx.db
             .query('members')
-            .withIndex('by_workspace_id_user_id', (q) => q.eq('workspaceId', channel.workspaceId).eq('userId', userId))
+            .withIndex('by_workspace_id_user_id', (q) =>
+                q.eq('workspaceId', channel.workspaceId).eq('userId', userId),
+            )
             .unique()
 
         if (!member || member.role !== 'admin') {

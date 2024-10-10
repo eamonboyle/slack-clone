@@ -24,10 +24,15 @@ export default function WorkspaceSwitcher() {
     const workspaceId = useWorkspaceId()
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_open, setOpen] = useCreateWorkspaceModal()
-    const { data: workspaces, isLoading: workspacesLoading } = useGetWorkspaces()
-    const { data: workspace, isLoading: workspaceLoading } = useGetWorkspace({ workspaceId })
+    const { data: workspaces, isLoading: workspacesLoading } =
+        useGetWorkspaces()
+    const { data: workspace, isLoading: workspaceLoading } = useGetWorkspace({
+        workspaceId,
+    })
 
-    const filteredWorkspaces = workspaces?.filter((ws) => ws._id !== workspaceId)
+    const filteredWorkspaces = workspaces?.filter(
+        (ws) => ws._id !== workspaceId,
+    )
 
     if (workspacesLoading) {
         return <Loader className="size-5 animate-spin" /> // Show loading indicator for workspaces
@@ -53,7 +58,11 @@ export default function WorkspaceSwitcher() {
                     {workspaceLoading ? (
                         <Loader className="size-5 animate-spin shrink-0" />
                     ) : (
-                        <span>{workspace?.name ? workspace.name.charAt(0).toUpperCase() : 'N/A'}</span>
+                        <span>
+                            {workspace?.name
+                                ? workspace.name.charAt(0).toUpperCase()
+                                : 'N/A'}
+                        </span>
                     )}
                 </Button>
             </DropdownMenuTrigger>
@@ -63,11 +72,16 @@ export default function WorkspaceSwitcher() {
                     className="cursor-pointer flex-col justify-start items-start capitalize"
                 >
                     {workspace?.name}
-                    <span className="text-xs text-muted-foreground">Active workspace</span>
+                    <span className="text-xs text-muted-foreground">
+                        Active workspace
+                    </span>
                 </DropdownMenuItem>
                 {filteredWorkspaces?.map(renderWorkspaceItem)}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setOpen(true)} className="cursor-pointer">
+                <DropdownMenuItem
+                    onClick={() => setOpen(true)}
+                    className="cursor-pointer"
+                >
                     <div className="size-9 relative overflow-hidden bg-[#F2F2F2] text-slate-800 font-semibold text-lg rounded-md flex items-center justify-center mr-2">
                         <Plus className="size-5" />
                     </div>

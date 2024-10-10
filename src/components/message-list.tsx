@@ -57,52 +57,57 @@ export const MessageList = ({
 
     return (
         <div className="flex-1 flex flex-col-reverse pb-4 overflow-y-auto messages-scrollbar">
-            {Object.entries(groupedMessages || {}).map(([dateKey, messages]) => (
-                <div key={dateKey}>
-                    <div className="text-center my-2 relative">
-                        <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
-                        <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm">
-                            {formatDateLabel(dateKey)}
-                        </span>
+            {Object.entries(groupedMessages || {}).map(
+                ([dateKey, messages]) => (
+                    <div key={dateKey}>
+                        <div className="text-center my-2 relative">
+                            <hr className="absolute top-1/2 left-0 right-0 border-t border-gray-300" />
+                            <span className="relative inline-block bg-white px-4 py-1 rounded-full text-xs border border-gray-300 shadow-sm">
+                                {formatDateLabel(dateKey)}
+                            </span>
+                        </div>
+                        {messages.map((message, index) => {
+                            if (!message) return null
+
+                            const previousMessage = messages[index - 1]
+                            const isCompact =
+                                previousMessage &&
+                                previousMessage.user?._id ===
+                                    message.user?._id &&
+                                differenceInMinutes(
+                                    new Date(message._creationTime),
+                                    new Date(previousMessage._creationTime),
+                                ) < TIME_THRESHOLD
+
+                            return (
+                                <Message
+                                    key={message._id}
+                                    id={message._id}
+                                    memberId={message.memberId}
+                                    authorImage={message.user.image}
+                                    authorName={message.user.name}
+                                    isAuthor={
+                                        message.memberId === currentMember?._id
+                                    }
+                                    reactions={message.reactions}
+                                    body={message.body}
+                                    image={message.image}
+                                    updatedAt={message.updatedAt}
+                                    createdAt={message._creationTime}
+                                    isEditing={editingId === message._id}
+                                    setEditingId={setEditingId}
+                                    isCompact={isCompact ?? false}
+                                    hideThreadButton={variant === 'thread'}
+                                    threadCount={message.threadCount}
+                                    threadImage={message.threadImage}
+                                    threadName={message.threadName}
+                                    threadTimestamp={message.threadTimestamp}
+                                />
+                            )
+                        })}
                     </div>
-                    {messages.map((message, index) => {
-                        if (!message) return null
-
-                        const previousMessage = messages[index - 1]
-                        const isCompact =
-                            previousMessage &&
-                            previousMessage.user?._id === message.user?._id &&
-                            differenceInMinutes(
-                                new Date(message._creationTime),
-                                new Date(previousMessage._creationTime),
-                            ) < TIME_THRESHOLD
-
-                        return (
-                            <Message
-                                key={message._id}
-                                id={message._id}
-                                memberId={message.memberId}
-                                authorImage={message.user.image}
-                                authorName={message.user.name}
-                                isAuthor={message.memberId === currentMember?._id}
-                                reactions={message.reactions}
-                                body={message.body}
-                                image={message.image}
-                                updatedAt={message.updatedAt}
-                                createdAt={message._creationTime}
-                                isEditing={editingId === message._id}
-                                setEditingId={setEditingId}
-                                isCompact={isCompact ?? false}
-                                hideThreadButton={variant === 'thread'}
-                                threadCount={message.threadCount}
-                                threadImage={message.threadImage}
-                                threadName={message.threadName}
-                                threadTimestamp={message.threadTimestamp}
-                            />
-                        )
-                    })}
-                </div>
-            ))}
+                ),
+            )}
 
             <div
                 className="h-1"
@@ -135,10 +140,15 @@ export const MessageList = ({
             )}
 
             {variant === 'channel' && channelName && channelCreationTime && (
-                <ChannelHero name={channelName} creationTime={channelCreationTime} />
+                <ChannelHero
+                    name={channelName}
+                    creationTime={channelCreationTime}
+                />
             )}
 
-            {variant === 'conversation' && <ConversationHero name={memberName} image={memberImage} />}
+            {variant === 'conversation' && (
+                <ConversationHero name={memberName} image={memberImage} />
+            )}
         </div>
     )
 }

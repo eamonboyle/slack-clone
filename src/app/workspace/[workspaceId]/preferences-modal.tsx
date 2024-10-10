@@ -24,16 +24,25 @@ interface PreferencesModalProps {
     initialValue: string
 }
 
-export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesModalProps) => {
+export const PreferencesModal = ({
+    open,
+    setOpen,
+    initialValue,
+}: PreferencesModalProps) => {
     const router = useRouter()
     const workspaceId = useWorkspaceId()
-    const [ConfirmDialog, confirm] = useConfirm('Delete Workspace', 'Are you sure you want to delete this workspace?')
+    const [ConfirmDialog, confirm] = useConfirm(
+        'Delete Workspace',
+        'Are you sure you want to delete this workspace?',
+    )
 
     const [value, setValue] = useState(initialValue)
     const [isEditing, setIsEditing] = useState(false)
 
-    const { mutate: updateWorkspace, isPending: isUpdatingWorkspace } = useUpdateWorkspace()
-    const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } = useDeleteWorkspace()
+    const { mutate: updateWorkspace, isPending: isUpdatingWorkspace } =
+        useUpdateWorkspace()
+    const { mutate: deleteWorkspace, isPending: isDeletingWorkspace } =
+        useDeleteWorkspace()
 
     const handleUpdateWorkspace = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -83,21 +92,32 @@ export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesMod
                             <DialogTrigger asChild>
                                 <div className="px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-sm font-semibold">Workspace Name</p>
-                                        <p className="text-sm text-[#1264A3] hover:underline font-semibold">Edit</p>
+                                        <p className="text-sm font-semibold">
+                                            Workspace Name
+                                        </p>
+                                        <p className="text-sm text-[#1264A3] hover:underline font-semibold">
+                                            Edit
+                                        </p>
                                     </div>
                                     <p className="text-sm">{value}</p>
                                 </div>
                             </DialogTrigger>
                             <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle>Edit Workspace Name</DialogTitle>
+                                    <DialogTitle>
+                                        Edit Workspace Name
+                                    </DialogTitle>
                                 </DialogHeader>
-                                <form className="space-y-4" onSubmit={handleUpdateWorkspace}>
+                                <form
+                                    className="space-y-4"
+                                    onSubmit={handleUpdateWorkspace}
+                                >
                                     <Input
                                         value={value}
                                         disabled={isUpdatingWorkspace}
-                                        onChange={(e) => setValue(e.target.value)}
+                                        onChange={(e) =>
+                                            setValue(e.target.value)
+                                        }
                                         placeholder="Workspace Name e.g. 'Work', 'Personal', 'School'"
                                         required
                                         autoFocus
@@ -106,11 +126,17 @@ export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesMod
                                     />
                                     <DialogFooter>
                                         <DialogClose asChild>
-                                            <Button variant="outline" disabled={isUpdatingWorkspace}>
+                                            <Button
+                                                variant="outline"
+                                                disabled={isUpdatingWorkspace}
+                                            >
                                                 Cancel
                                             </Button>
                                         </DialogClose>
-                                        <Button type="submit" disabled={isUpdatingWorkspace}>
+                                        <Button
+                                            type="submit"
+                                            disabled={isUpdatingWorkspace}
+                                        >
                                             Save
                                         </Button>
                                     </DialogFooter>
@@ -123,7 +149,9 @@ export const PreferencesModal = ({ open, setOpen, initialValue }: PreferencesMod
                             className="flex items-center gap-x-2 px-5 py-4 bg-white rounded-lg border cursor-pointer hover:bg-gray-50 text-rose-600"
                         >
                             <TrashIcon className="size-4" />
-                            <p className="text-sm font-semibold">Delete Workspace</p>
+                            <p className="text-sm font-semibold">
+                                Delete Workspace
+                            </p>
                         </button>
                     </div>
                 </DialogContent>

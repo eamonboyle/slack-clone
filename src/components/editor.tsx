@@ -1,4 +1,10 @@
-import { MutableRefObject, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import {
+    MutableRefObject,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react'
 
 import Quill, { QuillOptions } from 'quill'
 import { Delta, Op } from 'quill/core'
@@ -63,7 +69,9 @@ const Editor = ({
         }
 
         const container = containerRef.current
-        const editorContainer = container.appendChild(container.ownerDocument.createElement('div'))
+        const editorContainer = container.appendChild(
+            container.ownerDocument.createElement('div'),
+        )
 
         const options: QuillOptions = {
             theme: 'snow',
@@ -88,22 +96,32 @@ const Editor = ({
                             key: 'Enter',
                             handler: () => {
                                 const text = quill.getText()
-                                const addedImage = imageElementRef.current?.files?.[0] || null
+                                const addedImage =
+                                    imageElementRef.current?.files?.[0] || null
 
-                                const isEmpty = !addedImage && text.replace(/<(.|\n)*?>/g, '').trim().length === 0
+                                const isEmpty =
+                                    !addedImage &&
+                                    text.replace(/<(.|\n)*?>/g, '').trim()
+                                        .length === 0
 
                                 if (isEmpty) {
                                     return
                                 }
 
-                                submitRef.current?.({ body: JSON.stringify(quill.getContents()), image: addedImage })
+                                submitRef.current?.({
+                                    body: JSON.stringify(quill.getContents()),
+                                    image: addedImage,
+                                })
                             },
                         },
                         shift_enter: {
                             key: 13,
                             shiftKey: true,
                             handler: () => {
-                                quillRef.current?.insertText(quillRef.current.getLength(), '\n')
+                                quillRef.current?.insertText(
+                                    quillRef.current.getLength(),
+                                    '\n',
+                                )
                             },
                         },
                     },
@@ -145,7 +163,8 @@ const Editor = ({
 
     const toggleToolbar = () => {
         setIsToolbarVisible((prev) => !prev)
-        const toolbarElement = containerRef.current?.querySelector('.ql-toolbar')
+        const toolbarElement =
+            containerRef.current?.querySelector('.ql-toolbar')
 
         if (toolbarElement) {
             toolbarElement?.classList.toggle('hidden')
@@ -158,7 +177,8 @@ const Editor = ({
         quill?.insertText(quill.getSelection()?.index || 0, emoji.native)
     }
 
-    const isEmpty = !image && text.replace(/<(.|\n)*?>/g, '').trim().length === 0
+    const isEmpty =
+        !image && text.replace(/<(.|\n)*?>/g, '').trim().length === 0
 
     return (
         <div className="flex flex-col">
@@ -200,13 +220,28 @@ const Editor = ({
                     </div>
                 )}
                 <div className="flex px-2 pb-2 z-[5]">
-                    <Hint label={isToolbarVisible ? 'Hide formatting' : 'Show formatting'}>
-                        <Button disabled={disabled} variant="ghost" size="iconSm" onClick={toggleToolbar}>
+                    <Hint
+                        label={
+                            isToolbarVisible
+                                ? 'Hide formatting'
+                                : 'Show formatting'
+                        }
+                    >
+                        <Button
+                            disabled={disabled}
+                            variant="ghost"
+                            size="iconSm"
+                            onClick={toggleToolbar}
+                        >
                             <PiTextAa className="size-4" />
                         </Button>
                     </Hint>
                     <EmojiPopover onEmojiSelect={onEmojiSelect}>
-                        <Button disabled={disabled} variant="ghost" size="iconSm">
+                        <Button
+                            disabled={disabled}
+                            variant="ghost"
+                            size="iconSm"
+                        >
                             <Smile className="size-4" />
                         </Button>
                     </EmojiPopover>
@@ -228,7 +263,12 @@ const Editor = ({
                             <Button
                                 disabled={disabled || isEmpty}
                                 onClick={() => {
-                                    onSubmit({ body: JSON.stringify(quillRef.current?.getContents()), image })
+                                    onSubmit({
+                                        body: JSON.stringify(
+                                            quillRef.current?.getContents(),
+                                        ),
+                                        image,
+                                    })
                                 }}
                                 className={cn(
                                     'ml-auto',
@@ -245,14 +285,24 @@ const Editor = ({
 
                     {variant === 'update' && (
                         <div className="ml-auto flex items-center gap-x-2">
-                            <Button variant="outline" size="sm" onClick={onCancel} disabled={disabled}>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={onCancel}
+                                disabled={disabled}
+                            >
                                 Cancel
                             </Button>
                             <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => {
-                                    onSubmit({ body: JSON.stringify(quillRef.current?.getContents()), image })
+                                    onSubmit({
+                                        body: JSON.stringify(
+                                            quillRef.current?.getContents(),
+                                        ),
+                                        image,
+                                    })
                                 }}
                                 disabled={disabled || isEmpty}
                                 className="bg-[#007A5A] hover:bg-[#007A5A]/80 text-white"

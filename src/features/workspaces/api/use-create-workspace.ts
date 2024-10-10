@@ -22,7 +22,9 @@ export const useCreateWorkspace = () => {
     const [data, setData] = useState<ResponseType>(null)
     const [error, setError] = useState<Error | null>(null)
 
-    const [status, setStatus] = useState<'success' | 'error' | 'settled' | 'pending' | null>(null)
+    const [status, setStatus] = useState<
+        'success' | 'error' | 'settled' | 'pending' | null
+    >(null)
 
     const isPending = useMemo(() => status === 'pending', [status])
     const isSuccess = useMemo(() => status === 'success', [status])
@@ -60,5 +62,14 @@ export const useCreateWorkspace = () => {
         [mutation],
     )
 
-    return { mutate, data, error, status, isPending, isSuccess, isError, isSettled }
+    return {
+        mutate,
+        data,
+        error,
+        status,
+        isPending,
+        isSuccess,
+        isError,
+        isSettled,
+    }
 }
