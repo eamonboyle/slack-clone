@@ -1,7 +1,7 @@
 'use client'
 
 import Sidebar from './sidebar'
-import Toolbar from './toolbar'
+import Toolbar from './workspace-toolbar'
 import {
     ResizableHandle,
     ResizablePanel,

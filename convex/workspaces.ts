@@ -184,17 +184,58 @@ export const deleteById = mutation({
             throw new Error('Unauthorized')
         }
 
-        const [members] = await Promise.all([
-            ctx.db
-                .query('members')
-                .withIndex('by_workspace_id', (q) =>
-                    q.eq('workspaceId', args.workspaceId),
-                )
-                .collect(),
-        ])
+        const [members, channels, messages, reactions, conversations] =
+            await Promise.all([
+                ctx.db
+                    .query('members')
+                    .withIndex('by_workspace_id', (q) =>
+                        q.eq('workspaceId', args.workspaceId),
+                    )
+                    .collect(),
+                ctx.db
+                    .query('channels')
+                    .withIndex('by_workspace_id', (q) =>
+                        q.eq('workspaceId', args.workspaceId),
+                    )
+                    .collect(),
+                ctx.db
+                    .query('messages')
+                    .withIndex('by_workspace_id', (q) =>
+                        q.eq('workspaceId', args.workspaceId),
+                    )
+                    .collect(),
+                ctx.db
+                    .query('reactions')
+                    .withIndex('by_workspace_id', (q) =>
+                        q.eq('workspaceId', args.workspaceId),
+                    )
+                    .collect(),
+                ctx.db
+                    .query('conversations')
+                    .withIndex('by_workspace_id', (q) =>
+                        q.eq('workspaceId', args.workspaceId),
+                    )
+                    .collect(),
+            ])
 
         for (const member of members) {
             await ctx.db.delete(member._id)
+        }
+
+        for (const channel of channels) {
+            await ctx.db.delete(channel._id)
+        }
+
+        for (const message of messages) {
+            await ctx.db.delete(message._id)
+        }
+
+        for (const reaction of reactions) {
+            await ctx.db.delete(reaction._id)
+        }
+
+        for (const conversation of conversations) {
+            await ctx.db.delete(conversation._id)
         }
 
         // delete workspace
